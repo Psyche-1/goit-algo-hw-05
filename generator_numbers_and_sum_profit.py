@@ -3,7 +3,7 @@ import re
 
 def generator_numbers(text: str):
     """Function that get text, find float numbers and return it as a generator"""
-    pattern = r'\d+\.\d+'
+    pattern = r' \d+\.\d+'
 
     matches = re.findall(pattern, text)
 

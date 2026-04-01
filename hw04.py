@@ -1,37 +1,33 @@
 from typing import Callable
 
+def input_error(func: Callable):
+    def inner(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except ValueError:
+            return "Give me name and phone please."
+        except IndexError:
+            return "Enter user name."
+        except KeyError:
+            return "User name not found."
+
+    return inner
+
+@input_error
 def parse_input(user_input: str):
     """Function parse string to get command and other arguments"""
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
     return cmd, *args
 
-def input_error_add_contact(func: Callable):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Give me name and phone please."
-
-    return inner
-
-@input_error_add_contact
+@input_error
 def add_contact(args: list[str], contacts: dict[str, str]):
     """Function add phone to contacts by name"""
     name, phone = args
     contacts[name] = phone
     return "Contact added."
 
-def input_error_change_contact(func: Callable):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except ValueError:
-            return "Give me name and phone please."
-
-    return inner
-
-@input_error_change_contact
+@input_error
 def change_contact(args: list[str], contacts: dict[str, str]):
     """Function change phone to contacts by name"""
     name, phone = args
@@ -40,18 +36,7 @@ def change_contact(args: list[str], contacts: dict[str, str]):
     contacts[name] = phone
     return "Contact updated."
 
-def input_error_show_phone(func: Callable):
-    def inner(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except IndexError:
-            return "Enter user name."
-        except KeyError:
-            return "User name not found."
-
-    return inner
-
-@input_error_show_phone
+@input_error
 def show_phone(args: list[str], contacts: dict[str, str]):
     """Function show phone to contacts by name"""
     name = args[0]
